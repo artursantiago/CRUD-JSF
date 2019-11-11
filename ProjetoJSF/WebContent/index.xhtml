@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.prime.com.tr/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" type="text/css" href="css/estilo_index.css" />
+	<title>Lista de Alunos</title>
+</h:head>
+
+<h:body>
+	<div class="container">
+		<h1 class="cabecalho">Univesidade Equipe Orbitais</h1>
+		
+		<h:form>
+		    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+		</h:form>
+				
+		
+		<div class="main">
+			<h2 class="subtitulo">Lista de Alunos</h2>
+			
+			<div class="conteudoPrincipal">
+			 
+			<h:link outcome="#{alunoMBean.chamaFormulario()}">
+				<h:graphicImage class="imagemAcao" value="imagens/plus_icon.png" />
+			</h:link>
+			
+				<p class="chamadaAcao">Cadastrar Novo Aluno</p>
+
+				<h:form>
+					<h:dataTable binding="#{alunoMBean.dataTable}"
+	           					 value="#{alunoMBean.listaAlunos}" var="listaAlunos">
+						<h:column>
+				        	<f:facet name="header">Matricula</f:facet>
+							<h:outputText value="#{listaAlunos.matricula}"/>
+				       	</h:column>
+				 
+				        <h:column>
+				        	<f:facet name="header">Nome</f:facet>
+							<h:outputText value="#{listaAlunos.pessoa.name}"/>
+				       	</h:column>
+				 
+				        <h:column>
+				        	<f:facet name="header">Ano de Entrada</f:facet>
+							<h:outputText value="#{listaAlunos.anoDeEntrada}"/>
+				       	</h:column>
+				       	<h:column>
+				        	<f:facet name="header">Ações</f:facet>
+				       		<h:commandLink action="#{alunoMBean.preEdit}">
+								<h:graphicImage class="imagemAcao" value="imagens/edit-icon.jpg" />
+							</h:commandLink>
+							<h:commandLink action="#{alunoMBean.remove}">
+								<h:graphicImage class="imagemAcao" value="imagens/trash_icon.png" />
+							</h:commandLink>
+				       	</h:column>
+					</h:dataTable>
+				</h:form>
+			</div>
+		</div>
+	</div>
+
+</h:body>
+</html>

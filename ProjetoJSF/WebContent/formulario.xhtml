@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.prime.com.tr/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" type="text/css" href="css/estilo_formulario.css" />
+	<script type="text/javascript" src="js/formulario.js"/>
+		
+	<title>Formulário</title>
+</h:head>
+
+<h:body>
+	<div class="container">
+		<h1 class="cabecalho">Univesidade Equipe Orbitais</h1>
+		
+		<h:form>
+			<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+		</h:form>
+		
+		<div class="main">
+			<h2 class="subtitulo">Formulário para Cadastro de Novo Aluno</h2>
+			<div class="conteudoPrincipal">
+			
+				<div class="imagemAndchamadaAcao">
+					<h:form class="form_secundario_imagem_home">
+						<h:commandLink action="#{alunoMBean.chamaIndex}" class="link_secundario_imagem_home">
+							<h:graphicImage class="imagemAcao" value="imagens/home.png" />
+						</h:commandLink>
+					</h:form>
+					<p class="chamadaAcao">Página Inicial</p><br/>
+					
+				</div>
+				
+				<h:form class="formulario">
+
+					<h:outputLabel class="matriculaLabel" value="Matricula: "/>
+					<h:inputText class="matriculaInput" value="#{alunoMBean.aluno.matricula}"/>
+					<br/>
+					<h:outputLabel class="nomeLabel" value="Nome: "/>  
+					<h:inputText class="nomeInput" value="#{alunoMBean.aluno.pessoa.name}"/>
+					<br/>
+					<h:outputLabel class="anoLabel" value="Ano de Entrada: "/>
+					<h:inputText class="anoInput" value="#{alunoMBean.aluno.anoDeEntrada}"/>
+					<br/>
+					<h:commandButton class="confirmaBtn" value="Confirmar" action="#{alunoMBean.save}"/>
+					<h:commandButton class="cancelaBtn" value="Cancelar" action="#{alunoMBean.chamaIndex}"/>
+				</h:form>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+</h:body>
+</html>

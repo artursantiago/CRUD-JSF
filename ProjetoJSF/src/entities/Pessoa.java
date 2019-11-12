@@ -14,14 +14,19 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ * 
+ * @author artur
+ *
+ *
+ */
 @Entity
 @Table(name = "pessoa", schema = "comum")
 public class Pessoa implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * Coluna Id da tabela pessoa no banco de dados.
-	 * Definida para ser gerada automaticamente a partir de uma sequencia pessoa_seq.
+	 * O Id foi definida para ser gerado automaticamente a partir de uma sequencia pessoa_seq.
 	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pessoa_seq")
@@ -29,16 +34,36 @@ public class Pessoa implements Serializable{
 	private int id;
 	
 	/**
-	 * Coluna name da tabela pessoa no banco de dados.
+	 * Coluna name do banco. Deve ter no máximo 100 caracteres.
 	 */
 	@Column(name = "name")
 	private String name;
 	
 	/**
 	 * Relação Um-para-Muitos com a tabela aluno, ou seja, uma pessoa pode ter vários vínculos como aluno.
+	 * Esta lista armazena todos os "vínculos" de aluno que essa pessoa tem.
 	 */
 	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<Aluno> aluno;
+	
+	/**
+	 * 
+	 */
+	public void validar() {
+		/**
+		 * 
+		 */
+		if(this.getName() == "") {
+			throw new IllegalArgumentException("Informe o nome do aluno.");
+		}
+		
+		/**
+		 * Verifica se o nome do aluno tem mais que 100 caracteres.
+		 */
+		if(this.getName().length() > 100) {
+			throw new IllegalArgumentException("O nome do Aluno deve ter no máximo 100 caracteres.");
+		}
+	}
 	
 	////////////////Getters and Setters///////////////////////
 	public int getId() {

@@ -1,5 +1,6 @@
 package repositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -7,6 +8,12 @@ import javax.persistence.Query;
 
 import entities.Aluno;
 
+/**
+ * 
+ * @author artur
+ *
+ *
+ */
 public class AlunoRepository extends AbstractRepository{
 	
 	EntityManager manager;
@@ -42,7 +49,7 @@ public class AlunoRepository extends AbstractRepository{
 		manager.close();
 		return lista;
     }
-	
+
 	/**
 	 * Remove o objeto aluno do banco de dados.
 	 */
@@ -69,4 +76,26 @@ public class AlunoRepository extends AbstractRepository{
 	/**
 	 * CRIAR UM MÉTODO PARA PROCURAR UM ALUNO POR ID
 	 */
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Aluno> findTeste() {
+		manager = createEntityManager();
+		manager.getTransaction().begin();
+		Query consulta = manager.createQuery("select a.id, a.matricula, p.name, a.anoDeEntrada from entities.Aluno a INNER JOIN entities.Pessoa as p ON a.pessoa.id = p.id");
+		List<Object> listaTeste = consulta.getResultList();
+		List<Aluno> lista = new ArrayList<Aluno>();
+		for(Object o: listaTeste) {
+			Aluno aluno = new Aluno();
+			Object[] obj = (Object[]) o;
+			aluno.setId(Integer.parseInt(String.valueOf(obj[0])));
+			aluno.setMatricula(String.valueOf(obj[1]));
+			aluno.getPessoa().setName(String.valueOf(obj[2]));
+			aluno.setAnoDeEntrada(String.valueOf(obj[3]));
+			lista.add(aluno);
+		}
+		manager.getTransaction().commit();
+		manager.close();
+		return lista;
+    }
 }

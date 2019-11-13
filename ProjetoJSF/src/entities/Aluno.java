@@ -18,6 +18,7 @@ import javax.persistence.Table;
  * 
  * @author artur
  *
+ *Classe responsável por mapear a tabela aluno do banco de dados.
  *
  */
 @Entity
@@ -56,9 +57,21 @@ public class Aluno implements Serializable{
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_pessoa", referencedColumnName = "id", nullable = false)
 	private Pessoa pessoa = new Pessoa();
-
+	
+	
+	//////Contrutores///////
+	public Aluno() {}
+	
+	public Aluno(String matricula, String anoDeEntrada, String name) {
+		this.setMatricula(matricula);
+		this.setAnoDeEntrada(anoDeEntrada);
+		//Pessoa pessoa = new Pessoa(name);
+		//this.setPessoa(pessoa);
+		this.getPessoa().setName(name);
+	}
+	
 	/**
-	 * Valida se os dados do aluno foram preenchidos para salvar
+	 * Valida as regras que se aplicão aos atributos desse aluno.
 	 */
 	public void validar() {
 		/**
@@ -70,7 +83,7 @@ public class Aluno implements Serializable{
 		if(this.getAnoDeEntrada() == "") {
 			throw new IllegalArgumentException("Informe o ano de entrada do aluno.");
 		}
-		if(this.getMatricula() == null || this.getPessoa().getName() == null || this.getAnoDeEntrada() == null) {
+		if(this.getMatricula() == null || this.getAnoDeEntrada() == null) {
 			throw new IllegalArgumentException("Objeto aluno não persistido");
 		}
 
@@ -97,7 +110,7 @@ public class Aluno implements Serializable{
 		}
 		
 		/**
-		 * Valida os dados da classe Pessoa.
+		 * Valida os dados da classe Pessoa desse aluno.
 		 */
 		this.getPessoa().validar();
 	}

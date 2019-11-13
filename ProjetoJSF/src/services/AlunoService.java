@@ -9,8 +9,8 @@ import repositories.AlunoRepository;
 /**
  * 
  * @author artur
- *
- *
+ *Classe responsável por realizar a validação das regras de negócio
+ *da aplicação.
  */
 public class AlunoService {
 	
@@ -23,6 +23,15 @@ public class AlunoService {
 		}
 		else {
 			salvaAluno(aluno);
+		}
+	}
+	
+	public void salvarAluno(Aluno aluno, AlunoRepository repo) {
+		if(aluno.getId() > 0) {
+			editaAluno(aluno);
+		}
+		else {
+			salvaAluno(aluno, repo);
 		}
 	}
 	
@@ -47,11 +56,6 @@ public class AlunoService {
 		return repository.findAll();
 	}
 	
-	public List<Aluno> findTeste() {
-		AlunoRepository repository = new AlunoRepository();
-		return repository.findTeste();
-	}
-	
 	//////////////// metodos privados ///////////////////////
 	
 	/**
@@ -64,6 +68,12 @@ public class AlunoService {
 		repository.save(aluno);
 	}
 	
+	private void salvaAluno(Aluno aluno, AlunoRepository repo) {
+		aluno.validar();
+		validaAluno(aluno);
+		AlunoRepository repository = repo;
+		repository.save(aluno);
+	}
 	/**
 	 * Método privado responsável por atualizar um aluno após ser validado.
 	 */

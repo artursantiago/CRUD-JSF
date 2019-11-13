@@ -33,20 +33,20 @@
 
 				<h:form>
 					<h:dataTable binding="#{alunoMBean.dataTable}"
-	           					 value="#{alunoMBean.listaAlunosTeste}" var="listaAlunosTeste">
+	           					 value="#{alunoMBean.listaAlunos}" var="listaAlunos">
 						<h:column>
 				        	<f:facet name="header">Matricula</f:facet>
-							<h:outputText value="#{listaAlunosTeste.matricula}"/>
+							<h:outputText value="#{listaAlunos.matricula}"/>
 				       	</h:column>
 				 
 				        <h:column>
 				        	<f:facet name="header">Nome</f:facet>
-							<h:outputText value="#{listaAlunosTeste.pessoa.name}"/>
+							<h:outputText value="#{listaAlunos.pessoa.name}"/>
 				       	</h:column>
 				 
 				        <h:column>
 				        	<f:facet name="header">Ano de Entrada</f:facet>
-							<h:outputText value="#{listaAlunosTeste.anoDeEntrada}"/>
+							<h:outputText value="#{listaAlunos.anoDeEntrada}"/>
 				       	</h:column>
 				       	<h:column>
 				        	<f:facet name="header">Ações</f:facet>

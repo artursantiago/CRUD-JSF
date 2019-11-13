@@ -11,7 +11,7 @@ import entities.Aluno;
 /**
  * 
  * @author artur
- *
+ * Classe responsável por manipular as tabelas do banco de dados.
  *
  */
 public class AlunoRepository extends AbstractRepository{
@@ -34,21 +34,6 @@ public class AlunoRepository extends AbstractRepository{
 		manager.getTransaction().commit();
 		manager.close();
 	}
-	
-	/**
-	 * Retorna uma lista de todos os objetos da tabela Aluno
-	 * a partir de uma query pré-estabelecida.
-	 */
-	@SuppressWarnings("unchecked")
-	public List<Aluno> findAll() {
-		manager = createEntityManager();
-		manager.getTransaction().begin();
-		Query consulta = manager.createQuery("from entities.Aluno");
-		List<Aluno> lista= consulta.getResultList();
-		manager.getTransaction().commit();
-		manager.close();
-		return lista;
-    }
 
 	/**
 	 * Remove o objeto aluno do banco de dados.
@@ -74,12 +59,11 @@ public class AlunoRepository extends AbstractRepository{
 	}	
 	
 	/**
-	 * CRIAR UM MÉTODO PARA PROCURAR UM ALUNO POR ID
+	 * Retorna uma lista de todos os objetos da tabela Aluno
+	 * a partir de uma query pré-estabelecida.
 	 */
-	
-	
 	@SuppressWarnings("unchecked")
-	public List<Aluno> findTeste() {
+	public List<Aluno> findAll() {
 		manager = createEntityManager();
 		manager.getTransaction().begin();
 		Query consulta = manager.createQuery("select a.id, a.matricula, p.name, a.anoDeEntrada from entities.Aluno a INNER JOIN entities.Pessoa as p ON a.pessoa.id = p.id");
@@ -98,4 +82,9 @@ public class AlunoRepository extends AbstractRepository{
 		manager.close();
 		return lista;
     }
+	
+	
+	/**
+	 * CRIAR UM MÉTODO PARA PROCURAR UM ALUNO POR ID
+	 */
 }

@@ -33,14 +33,18 @@ public class AlunoMBean {
 	
 	//Variável dataTable que irá criar, dinamicamente, uma tabela na view.
 	private HtmlDataTable dataTable;
-	
-	private List<Aluno> listaAlunosTeste = new ArrayList<Aluno>();
+
 	/**
 	 * -----Construtor-----
 	 * Chamado apenas quando a pagina é carregada pela primeira vez no browser, 
 	 * devido ao SessionScoped
 	 */
 	public AlunoMBean() {
+		carregaTabela();
+	}
+	
+	public AlunoMBean(AlunoService service) {
+		this.service = service;
 		carregaTabela();
 	}
 	
@@ -112,8 +116,8 @@ public class AlunoMBean {
 	 */
 	public void carregaTabela() {
 		dataTable = null;
-		//listaAlunos = service.findAll();
-		listaAlunosTeste = service.findTeste();
+		listaAlunos = service.findAll();
+		//listaAlunosTeste = service.findTeste();
 	}
 	
 	/**
@@ -158,13 +162,6 @@ public class AlunoMBean {
 		this.dataTable = dataTable;
 	}
 
-	public List<Aluno> getListaAlunosTeste() {
-		return listaAlunosTeste;
-	}
-
-	public void setListaAlunosTeste(List<Aluno> listaAlunosTeste) {
-		this.listaAlunosTeste = listaAlunosTeste;
-	}
 	
 	
 }

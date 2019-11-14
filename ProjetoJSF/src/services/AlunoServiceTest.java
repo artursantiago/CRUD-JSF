@@ -2,20 +2,21 @@ package services;
 
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import entities.Aluno;
 import repositories.AlunoRepository;
 
+/**
+ * Testa as regras de negocio da matricula, do ano e do nome do aluno.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class AlunoServiceTest {
 	
@@ -24,16 +25,13 @@ public class AlunoServiceTest {
 	@Mock
 	private AlunoRepository repository;
 	
+	@InjectMocks
 	private AlunoService service;
 	
 	@Before	
 	public void criaAluno() {
 		this.aluno = new Aluno();
-		this.service = new AlunoService(this.repository);
 	}
-	
-	//@Rule 
-	//public MockitoRule mockitoRule = MockitoJUnit.rule();
 
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
@@ -94,10 +92,8 @@ public class AlunoServiceTest {
 		aluno.setAnoDeEntrada("2021");
 		aluno.getPessoa().setName("Lucas");
 		
-		List<Integer> listaAlunosIDs = new ArrayList<Integer>();
-		listaAlunosIDs.add(3);
-		
-		when(repository.getAlunoIDByMatricula(aluno.getMatricula())).thenReturn(listaAlunosIDs);
+		int alunoIdDoBanco = 3;
+		when(repository.getAlunoIDByMatricula(aluno.getMatricula())).thenReturn(alunoIdDoBanco);
 		
 		exception.expect(IllegalArgumentException.class);
 		exception.expectMessage("Já existe um aluno com essa matrícula.");
@@ -115,10 +111,8 @@ public class AlunoServiceTest {
 		aluno.setAnoDeEntrada("2021");
 		aluno.getPessoa().setName("Lucas");
 		
-		List<Integer> listaAlunosIDs = new ArrayList<Integer>();
-		listaAlunosIDs.add(3);
-		
-		when(repository.getAlunoIDByMatricula(aluno.getMatricula())).thenReturn(listaAlunosIDs);
+		int alunoIdDoBanco = 3;
+		when(repository.getAlunoIDByMatricula(aluno.getMatricula())).thenReturn(alunoIdDoBanco);
 		
 		exception.expect(IllegalArgumentException.class);
 		exception.expectMessage("Já existe um aluno com essa matrícula.");
@@ -217,7 +211,7 @@ public class AlunoServiceTest {
 		aluno.getPessoa().setName(null);
 		
 		exception.expect(IllegalArgumentException.class);
-		exception.expectMessage("Objeto aluno não persistido");
+		exception.expectMessage("Objeto pessoa não persistido");
 		
 		service.salvarAluno(aluno);
 	}

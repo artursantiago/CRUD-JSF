@@ -8,8 +8,8 @@ import repositories.AlunoRepository;
 /**
  * 
  * @author artur
- *
- *
+ *Classe responsável por realizar a validação das regras de negócio
+ *da aplicação.
  */
 public class AlunoService {
 	
@@ -95,16 +95,13 @@ public class AlunoService {
 	 * Método privado para validação dos dados do aluno.
 	 */
 	private void validaAluno(Aluno aluno) {
-		
 		/**
 		 * Verifica se já exixte um aluno do banco com a matrícula do novo aluno se estiver salvando um novo aluno.
 		 */
-		List<Integer>  listaIDs = repository.getAlunoIDByMatricula(aluno.getMatricula());
-		for(Integer AlunoIdDaLista: listaIDs) {
-			if((aluno.getId() != AlunoIdDaLista)) {
-				throw new IllegalArgumentException("Já existe um aluno com essa matrícula.");
-			}
-		}
+		int alunoIdDoBanco = repository.getAlunoIDByMatricula(aluno.getMatricula());
 		
+		if((aluno.getId() != alunoIdDoBanco)) {
+			throw new IllegalArgumentException("Já existe um aluno com essa matrícula.");
+		}
 	}
 }

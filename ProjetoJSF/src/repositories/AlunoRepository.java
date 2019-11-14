@@ -11,7 +11,7 @@ import entities.Aluno;
 /**
  * 
  * @author artur
- *
+ * Classe responsável por manipular as tabelas do banco de dados.
  *
  */
 public class AlunoRepository extends AbstractRepository{
@@ -34,9 +34,6 @@ public class AlunoRepository extends AbstractRepository{
 		manager.getTransaction().commit();
 		manager.close();
 	}
-	
-
-
 
 	/**
 	 * Remove o objeto aluno do banco de dados.
@@ -62,7 +59,7 @@ public class AlunoRepository extends AbstractRepository{
 	}	
 	
 	/**
-	 * Retorna uma lista de todos os objetos da tabela Aluno
+	 * Retorna uma lista dos objetos da tabela Aluno
 	 * a partir de uma query pré-estabelecida.
 	 */
 	@SuppressWarnings("unchecked")
@@ -86,11 +83,19 @@ public class AlunoRepository extends AbstractRepository{
 		return lista;
     }
 	
+	/**
+	 * Retorna uma lista com o id do aluno com a matricula informada.
+	 */
 	@SuppressWarnings("unchecked")
-	public List<Integer> getAlunoIDByMatricula(String matricula) {
+	public int getAlunoIDByMatricula(String matricula) {
+		int alunoIdDoBanco = -1;
 		manager = createEntityManager();
 		Query consulta = manager.createQuery("select a.id from entities.Aluno a INNER JOIN entities.Pessoa as p ON a.pessoa.id = p.id AND a.matricula = '" + matricula + "'");
 		List<Integer> listaIDs = consulta.getResultList();
-		return listaIDs;
+		if(!listaIDs.isEmpty()) {
+			alunoIdDoBanco = listaIDs.get(0);
+	
+		}
+		return alunoIdDoBanco;
 	}
 }

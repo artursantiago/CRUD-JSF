@@ -15,9 +15,9 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
- * 
  * @author artur
  *
+ *Classe responsável por mapear a tabela aluno do banco de dados.
  *
  */
 @Entity
@@ -51,24 +51,14 @@ public class Aluno implements Serializable{
 	 * Coluna id_pessoa do banco de dados.
 	 * É uma chave estrangeira para a coluna id da tabela pessoa.
 	 * Possui uma relação Muitos-para-um, ou seja, podem existir varios vínculos de aluno para uma única pessoa.
-	 * Não pode receber valores nulos.
 	 */
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_pessoa", referencedColumnName = "id", nullable = false)
 	private Pessoa pessoa = new Pessoa();
 	
-	public Aluno() {}
-	
-	public Aluno(String matricula, String anoDeEntrada, Pessoa pessoa) {
-		this.matricula = matricula;
-		this.anoDeEntrada = anoDeEntrada;
-		this.pessoa = pessoa;
-	}
-	
-	
 	
 	/**
-	 * Valida se os dados do aluno foram preenchidos para salvar
+	 * Valida as regras que se aplicão aos atributos desse aluno.
 	 */
 	public void validar() {
 		/**
@@ -107,7 +97,7 @@ public class Aluno implements Serializable{
 		}
 		
 		/**
-		 * Valida os dados da classe Pessoa.
+		 * Valida os dados da classe Pessoa desse aluno.
 		 */
 		this.getPessoa().validar();
 	}

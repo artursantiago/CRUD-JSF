@@ -1,37 +1,53 @@
 package services;
 
-import org.junit.Ignore;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.InjectMocks;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import entities.Aluno;
+import repositories.AlunoRepository;
 
+@RunWith(MockitoJUnitRunner.class)
 public class AlunoServiceTest {
 	
-	// private Aluno aluno;
+	private Aluno aluno;
 	
-	@InjectMocks
+	@Mock
+	private AlunoRepository repository;
+	
 	private AlunoService service;
 	
+	@Before	
+	public void criaAluno() {
+		this.aluno = new Aluno();
+		this.service = new AlunoService(this.repository);
+	}
+	
+	//@Rule 
+	//public MockitoRule mockitoRule = MockitoJUnit.rule();
+
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 	
-	/**
-	@Before	
-	private void criaAluno() {
-		this.aluno = new Aluno();
-	}
- 	*/
- 	
-	
+
 	/**
 	 * Campos do formulário escritos corretamente.
 	 */
 	@Test
 	public void testMatriculaNaoNulaNaoVaziaMenorOuIgualQueQuinzeCaracteres() {
-		Aluno aluno = new Aluno("2021010138", "2021", "Lucas");
+		aluno.setMatricula("2021010138");
+		aluno.setAnoDeEntrada("2021");
+		aluno.getPessoa().setName("Lucas");
+		
 		service.salvarAluno(aluno);
 	}
 	
@@ -42,13 +58,15 @@ public class AlunoServiceTest {
 	 * Testa se um matricula null está sendo submetida.
 	 */
 	@Test
-	@Ignore
 	public void testMatriculaNula() {
-		Aluno aluno = new Aluno(null, "2019", "Artur");
-		//Mockito.when(service.salvarAluno(aluno)).thenThrow(new IllegalArgumentException("Objeto aluno não persistido."));
+		aluno.setMatricula(null);
+		aluno.setAnoDeEntrada("2019");
+		aluno.getPessoa().setName("Artur");
 		
 		exception.expect(IllegalArgumentException.class);
 		exception.expectMessage("Objeto aluno não persistido");
+		
+		service.salvarAluno(aluno);
 	}
 	
 	/**
@@ -56,36 +74,72 @@ public class AlunoServiceTest {
 	 */
 	@Test
 	public void testMatriculaVazia() {
-		Aluno aluno = new Aluno("", "2019", "Artur");
-		service.salvarAluno(aluno);
+		aluno.setMatricula("");
+		aluno.setAnoDeEntrada("2019");
+		aluno.getPessoa().setName("Artur");
 		
 		exception.expect(IllegalArgumentException.class);
 		exception.expectMessage("Informe a matricula do aluno.");
+		
+		service.salvarAluno(aluno);
 	}
 	
 	/**
-	 * Testa se a matricula já existe no banco de dados.
+	 * Testa se a matricula já existe no banco de dados quando um aluno está sendo editado.
 	 */
 	@Test
-	@Ignore
-	public void testMatriculaJaExisteNoBanco() {
-		Aluno aluno = new Aluno("20191012", "2019", "Artur"); //Matricula Já existe no banco de dados
-		service.salvarAluno(aluno);
+	public void testAtualizarAlunoMatriculaJaExisteNoBanco() {
+		aluno.setId(2);
+		aluno.setMatricula("20191012");
+		aluno.setAnoDeEntrada("2021");
+		aluno.getPessoa().setName("Lucas");
+		
+		List<Integer> listaAlunosIDs = new ArrayList<Integer>();
+		listaAlunosIDs.add(3);
+		
+		when(repository.getAlunoIDByMatricula(aluno.getMatricula())).thenReturn(listaAlunosIDs);
 		
 		exception.expect(IllegalArgumentException.class);
-		exception.expectMessage("");
+		exception.expectMessage("Já existe um aluno com essa matrícula.");
+		
+		service.salvarAluno(aluno);
 	}
+	
+	
+	/**
+	 * Testa se a matricula já existe no banco de dados quando um novo aluno está sendo persistido.
+	 */
+	@Test
+	public void testSalvarNovoAlunoMatriculaJaExisteNoBanco() {
+		aluno.setMatricula("20191012");
+		aluno.setAnoDeEntrada("2021");
+		aluno.getPessoa().setName("Lucas");
+		
+		List<Integer> listaAlunosIDs = new ArrayList<Integer>();
+		listaAlunosIDs.add(3);
+		
+		when(repository.getAlunoIDByMatricula(aluno.getMatricula())).thenReturn(listaAlunosIDs);
+		
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage("Já existe um aluno com essa matrícula.");
+		
+		service.salvarAluno(aluno);
+	}
+	
 	
 	/**
 	 * Testa se a matricula possui mais do que 15 caracteres.
 	 */
 	@Test
 	public void testMatriculaMaiorQueQuinzeCaracteres() {
-		Aluno aluno = new Aluno("202001020304050", "2020", "Mateus"); //Matricula com 16 caracteres
-		service.salvarAluno(aluno);
+		aluno.setMatricula("20200102030405012");
+		aluno.setAnoDeEntrada("2020");
+		aluno.getPessoa().setName("Mateus");
 		
 		exception.expect(IllegalArgumentException.class);
-		exception.expectMessage("");
+		exception.expectMessage("A matrícula do aluno deve ter no máximo 15 caracteres.");
+		
+		service.salvarAluno(aluno);
 	}
 	
 	///////Testes AnoDeEntrada///////
@@ -94,66 +148,61 @@ public class AlunoServiceTest {
 	 * Testa se o anoDeEntrada é do tipo null.
 	 */
 	@Test
-	@Ignore
 	public void testAnoDeEntradaNulo() {
-		Aluno aluno = new Aluno("2021010138", null, "Artur");
-		
-		service.salvarAluno(aluno);
+		aluno.setMatricula("2021010138");
+		aluno.setAnoDeEntrada(null);
+		aluno.getPessoa().setName("Artur");
 		
 		exception.expect(IllegalArgumentException.class);
-		exception.expectMessage("");
+		exception.expectMessage("Objeto aluno não persistido");
+		
+		service.salvarAluno(aluno);
 	}
 	
 	/**
 	 * Testa se o anoDeEntrada está vázio.
 	 */
 	@Test
-	@Ignore
 	public void testAnoDeEntradaVazio() {
-		Aluno aluno = new Aluno("2021010138", "", "Mateus");
-		service.salvarAluno(aluno);
+		aluno.setMatricula("2021010138");
+		aluno.setAnoDeEntrada("");
+		aluno.getPessoa().setName("Mateus");
 		
 		exception.expect(IllegalArgumentException.class);
-		exception.expectMessage("");
+		exception.expectMessage("Informe o ano de entrada do aluno.");
+		
+		service.salvarAluno(aluno);
 	}
 	
 	/**
-	 * Testa se o anoDeEntrada possui menos do que 4 caracteres.
+	 * Testa se o anoDeEntrada não possui 4 caracteres.
 	 */
 	@Test
-	@Ignore
-	public void testAnoDeEntradaMenorQueQuatroCaracteres() {
-		Aluno aluno = new Aluno("2021010138", "999", "Lucas");
-		service.salvarAluno(aluno);
+	public void testAnoDeEntradaDiferenteDeQuatroCaracteres() {
+		aluno.setMatricula("2021010138");
+		aluno.setAnoDeEntrada("999");
+		aluno.getPessoa().setName("Lucas");
 		
 		exception.expect(IllegalArgumentException.class);
-		exception.expectMessage("");
+		exception.expectMessage("O ano de entrada deve ter 4 caracteres.");
+		
+		service.salvarAluno(aluno);
 	}
 	
-	/**
-	 * Testa se o anoDeEntrada possui mais do que 4 caracteres.
-	 */
-	@Test
-	@Ignore
-	public void testAnoDeEntradaMaiorQueQuatroCaracteres() {
-		Aluno aluno = new Aluno("2021010138", "10000", "Joao");
-		service.salvarAluno(aluno);
-		
-		exception.expect(IllegalArgumentException.class);
-		exception.expectMessage("");	
-	}
 	
 	/**
 	 * Testa se o anoDeEntrada é um ano com 4 caracteres menor que o ano atual.
 	 */
 	@Test
-	@Ignore
 	public void testAnoDeEntradaComQuatroCaracteresMenorQueAnoAtual() {
-		Aluno aluno = new Aluno("2021010138", "2018", "Jeremias");
-		service.salvarAluno(aluno);
+		aluno.setMatricula("2021010138");
+		aluno.setAnoDeEntrada("2018");
+		aluno.getPessoa().setName("Jeremias");
 		
 		exception.expect(IllegalArgumentException.class);
-		exception.expectMessage("");		
+		exception.expectMessage("Informe um ano maior ou igual ao ano atual.");	
+		
+		service.salvarAluno(aluno);		
 	}
 	
 	////////////Tests Nome/////////////
@@ -162,39 +211,45 @@ public class AlunoServiceTest {
 	 * Testa se o nome é do tipo null.
 	 */
 	@Test
-	@Ignore
 	public void testNomeNulo() {
-		Aluno aluno = new Aluno("2022010138", "2022", null);
-		service.salvarAluno(aluno);
+		aluno.setMatricula("2021010138");
+		aluno.setAnoDeEntrada("2022");
+		aluno.getPessoa().setName(null);
 		
 		exception.expect(IllegalArgumentException.class);
-		exception.expectMessage("");
+		exception.expectMessage("Objeto aluno não persistido");
+		
+		service.salvarAluno(aluno);
 	}
 	
 	/**
 	 * Testa se o nome está vazio.
 	 */
 	@Test
-	@Ignore
 	public void testNomeVazio() {
-		Aluno aluno = new Aluno("2021010138", "2021", "");
-		service.salvarAluno(aluno);
+		aluno.setMatricula("2021010138");
+		aluno.setAnoDeEntrada("2021");
+		aluno.getPessoa().setName("");
 		
 		exception.expect(IllegalArgumentException.class);
-		exception.expectMessage("");
+		exception.expectMessage("Informe o nome do aluno.");
+		
+		service.salvarAluno(aluno);
 	}
 	
 	/**
 	 * Testa se o nome possui mais do que 100 caracteres.
 	 */
-	@Test(expected=IllegalArgumentException.class)
-	@Ignore
+	@Test
 	public void testNomeMaiorQueCem() {
-		Aluno aluno = new Aluno("2020010138", "2020", "Matheus Santiago José da Silva Cavalcanti de Melo Paiva de Souza Santanna de Paula Ferreira Quintiliano Junior");
-		service.salvarAluno(aluno);
+		aluno.setMatricula("2021010138");
+		aluno.setAnoDeEntrada("2020");
+		aluno.getPessoa().setName("Matheus Santiago José da Silva Cavalcanti de Melo Paiva de Souza Santanna de Paula Ferreira Quintiliano Junior");
 		
-		//exception.expect(IllegalArgumentException.class);
-		//exception.expectMessage("");
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage("O nome do Aluno deve ter no máximo 100 caracteres.");
+		
+		service.salvarAluno(aluno);
 	}
 	
-}
+} 

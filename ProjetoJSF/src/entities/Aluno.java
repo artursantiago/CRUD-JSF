@@ -18,7 +18,6 @@ import javax.persistence.Table;
  * 
  * @author artur
  *
- *Classe responsável por mapear a tabela aluno do banco de dados.
  *
  */
 @Entity
@@ -58,20 +57,18 @@ public class Aluno implements Serializable{
 	@JoinColumn(name = "id_pessoa", referencedColumnName = "id", nullable = false)
 	private Pessoa pessoa = new Pessoa();
 	
-	
-	//////Contrutores///////
 	public Aluno() {}
 	
-	public Aluno(String matricula, String anoDeEntrada, String name) {
-		this.setMatricula(matricula);
-		this.setAnoDeEntrada(anoDeEntrada);
-		//Pessoa pessoa = new Pessoa(name);
-		//this.setPessoa(pessoa);
-		this.getPessoa().setName(name);
+	public Aluno(String matricula, String anoDeEntrada, Pessoa pessoa) {
+		this.matricula = matricula;
+		this.anoDeEntrada = anoDeEntrada;
+		this.pessoa = pessoa;
 	}
 	
+	
+	
 	/**
-	 * Valida as regras que se aplicão aos atributos desse aluno.
+	 * Valida se os dados do aluno foram preenchidos para salvar
 	 */
 	public void validar() {
 		/**
@@ -110,7 +107,7 @@ public class Aluno implements Serializable{
 		}
 		
 		/**
-		 * Valida os dados da classe Pessoa desse aluno.
+		 * Valida os dados da classe Pessoa.
 		 */
 		this.getPessoa().validar();
 	}

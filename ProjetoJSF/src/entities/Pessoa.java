@@ -18,7 +18,7 @@ import javax.persistence.Table;
  * 
  * @author artur
  *
- *Classe responsável por mapear a tabela pessoa do banco de dados.
+ *
  */
 @Entity
 @Table(name = "pessoa", schema = "comum")
@@ -44,29 +44,21 @@ public class Pessoa implements Serializable{
 	 * Esta lista armazena todos os "vínculos" de aluno que essa pessoa tem.
 	 */
 	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	private List<Aluno> alunos;
-	
-	//////////Construtores///////////
-	public Pessoa() {}
-	
-	public Pessoa(String name) {
-		this.setName(name);
-	}
+	private List<Aluno> aluno;
+
 	
 	/**
-	 * Valida as regras que se aplicão aos atributos dessa pessoa.
+	 * 
 	 */
 	public void validar() {
-		
 		/**
-		 * Verifica se o campo nome está null.
+		 * 
 		 */
 		if(this.getName() == null) {
-			throw new IllegalArgumentException("Objeto pessoa não persistido");
+			throw new IllegalArgumentException("Objeto aluno não persistido");
 		}
-		
 		/**
-		 * Verifica se o campo o nome está vazio.
+		 * 
 		 */
 		if(this.getName() == "") {
 			throw new IllegalArgumentException("Informe o nome do aluno.");
@@ -93,11 +85,11 @@ public class Pessoa implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public List<Aluno> getAlunos() {
-		return alunos;
+	public List<Aluno> getAluno() {
+		return aluno;
 	}
-	public void setAlunos(List<Aluno> alunos) {
-		this.alunos = alunos;
+	public void setAluno(List<Aluno> aluno) {
+		this.aluno = aluno;
 	}
 	
 	

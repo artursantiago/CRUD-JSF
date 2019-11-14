@@ -1,6 +1,5 @@
 package services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import entities.Aluno;
@@ -9,10 +8,21 @@ import repositories.AlunoRepository;
 /**
  * 
  * @author artur
- *Classe responsável por realizar a validação das regras de negócio
- *da aplicação.
+ *
+ *
  */
 public class AlunoService {
+	
+	
+	private AlunoRepository repository;
+	
+	public AlunoService() {
+		this.repository = new AlunoRepository();
+	}
+	
+	public AlunoService(AlunoRepository repository) {
+		this.repository = repository;
+	}
 	
 	/**
 	 * Metodo que salva ou edita um aluno.
@@ -26,15 +36,6 @@ public class AlunoService {
 		}
 	}
 	
-	public void salvarAluno(Aluno aluno, AlunoRepository repo) {
-		if(aluno.getId() > 0) {
-			editaAluno(aluno);
-		}
-		else {
-			salvaAluno(aluno, repo);
-		}
-	}
-	
 	/**
 	 * Método que remove um aluno
 	 */
@@ -44,43 +45,48 @@ public class AlunoService {
 			throw new IllegalArgumentException("Objeto aluno não persistido.");
 		}
 		aluno.validar();
-		AlunoRepository repository = new AlunoRepository();
+		//AlunoRepository repository = new AlunoRepository();
 		repository.remove(aluno);
 	}
 	
 	/**
 	 * Metodo que busca todos os dados da tabela
 	 */
+
 	public List<Aluno> findAll() {
-		AlunoRepository repository = new AlunoRepository();
+		//AlunoRepository repository = new AlunoRepository();
 		return repository.findAll();
 	}
 	
-	//////////////// metodos privados ///////////////////////
 	
+	public AlunoRepository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(AlunoRepository repository) {
+		this.repository = repository;
+	}
+	
+	//////////////// metodos privados ///////////////////////
+
+
 	/**
 	 * Método privado responsável por salvar um novo aluno após ser validado.
 	 */
 	private void salvaAluno(Aluno aluno) {
 		aluno.validar();
 		validaAluno(aluno);
-		AlunoRepository repository = new AlunoRepository();
+		//AlunoRepository repository = new AlunoRepository();
 		repository.save(aluno);
 	}
 	
-	private void salvaAluno(Aluno aluno, AlunoRepository repo) {
-		aluno.validar();
-		validaAluno(aluno);
-		AlunoRepository repository = repo;
-		repository.save(aluno);
-	}
 	/**
 	 * Método privado responsável por atualizar um aluno após ser validado.
 	 */
 	private void editaAluno(Aluno aluno) {
 		aluno.validar();
 		validaAluno(aluno);
-		AlunoRepository repository = new AlunoRepository();
+		//AlunoRepository repository = new AlunoRepository();
 		repository.update(aluno);	
 	}
 
@@ -93,15 +99,12 @@ public class AlunoService {
 		/**
 		 * Verifica se já exixte um aluno do banco com a matrícula do novo aluno se estiver salvando um novo aluno.
 		 */
-		List<Aluno> listaAlunos = new ArrayList<Aluno>();
-		AlunoService service = new AlunoService();
-		listaAlunos = service.findAll();
-		for(Aluno alunoDaLista: listaAlunos) {
-			if( (Long.parseLong(aluno.getMatricula()) == Long.parseLong(alunoDaLista.getMatricula()) && (aluno.getId() != alunoDaLista.getId())) ) {
+		List<Integer>  listaIDs = repository.getAlunoIDByMatricula(aluno.getMatricula());
+		for(Integer AlunoIdDaLista: listaIDs) {
+			if((aluno.getId() != AlunoIdDaLista)) {
 				throw new IllegalArgumentException("Já existe um aluno com essa matrícula.");
 			}
 		}
-		
 		
 	}
 }

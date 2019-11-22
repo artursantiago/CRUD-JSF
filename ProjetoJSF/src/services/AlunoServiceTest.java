@@ -2,6 +2,7 @@ package services;
 
 import static org.mockito.Mockito.when;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,15 +39,17 @@ public class AlunoServiceTest {
 	
 
 	/**
-	 * Campos do formulário escritos corretamente.
+	 * Método salvarAluno do service executado corretamente
 	 */
 	@Test
-	public void testMatriculaNaoNulaNaoVaziaMenorOuIgualQueQuinzeCaracteres() {
+	public void testSalvarAluno() {
 		aluno.setMatricula("2021010138");
 		aluno.setAnoDeEntrada("2021");
 		aluno.getPessoa().setName("Lucas");
 		
 		service.salvarAluno(aluno);
+		
+		Assert.assertTrue(aluno != null);
 	}
 	
 	
@@ -190,7 +193,7 @@ public class AlunoServiceTest {
 	@Test
 	public void testAnoDeEntradaComQuatroCaracteresMenorQueAnoAtual() {
 		aluno.setMatricula("2021010138");
-		aluno.setAnoDeEntrada("2018");
+		aluno.setAnoDeEntrada("2010");
 		aluno.getPessoa().setName("Jeremias");
 		
 		exception.expect(IllegalArgumentException.class);

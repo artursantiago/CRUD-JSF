@@ -45,7 +45,6 @@ public class AlunoService {
 			throw new IllegalArgumentException("Objeto aluno não persistido.");
 		}
 		aluno.validar();
-		//AlunoRepository repository = new AlunoRepository();
 		repository.remove(aluno);
 	}
 	
@@ -54,7 +53,6 @@ public class AlunoService {
 	 */
 
 	public List<Aluno> findAll() {
-		//AlunoRepository repository = new AlunoRepository();
 		return repository.findAll();
 	}
 	
@@ -76,7 +74,6 @@ public class AlunoService {
 	private void salvaAluno(Aluno aluno) {
 		aluno.validar();
 		validaAluno(aluno);
-		//AlunoRepository repository = new AlunoRepository();
 		repository.save(aluno);
 	}
 	
@@ -86,7 +83,6 @@ public class AlunoService {
 	private void editaAluno(Aluno aluno) {
 		aluno.validar();
 		validaAluno(aluno);
-		//AlunoRepository repository = new AlunoRepository();
 		repository.update(aluno);	
 	}
 

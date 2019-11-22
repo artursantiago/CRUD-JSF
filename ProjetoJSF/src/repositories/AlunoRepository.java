@@ -88,7 +88,7 @@ public class AlunoRepository extends AbstractRepository{
 	 */
 	@SuppressWarnings("unchecked")
 	public int getAlunoIDByMatricula(String matricula) {
-		int alunoIdDoBanco = -1;
+		int alunoIdDoBanco = 0;
 		manager = createEntityManager();
 		Query consulta = manager.createQuery("select a.id from entities.Aluno a INNER JOIN entities.Pessoa as p ON a.pessoa.id = p.id AND a.matricula = '" + matricula + "'");
 		List<Integer> listaIDs = consulta.getResultList();

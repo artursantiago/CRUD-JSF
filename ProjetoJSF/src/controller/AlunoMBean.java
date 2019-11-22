@@ -97,9 +97,10 @@ public class AlunoMBean {
 	 */
 	public String chamaIndex() {
 		carregaTabela();
-		if(aluno.getId() != 0) {
+		//System.out.println(aluno.getId());
+		//if(aluno.getId() != 0) {
 			aluno = new Aluno();
-		}
+		//}
 		return "index?faces-redirect=true";
 	}
 	
